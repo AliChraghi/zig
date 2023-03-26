@@ -32,6 +32,7 @@ pub const Step = @import("Build/Step.zig");
 pub const CheckFileStep = @import("Build/CheckFileStep.zig");
 pub const CheckObjectStep = @import("Build/CheckObjectStep.zig");
 pub const ConfigHeaderStep = @import("Build/ConfigHeaderStep.zig");
+pub const DownloadFileStep = @import("Build/DownloadFileStep.zig");
 pub const FmtStep = @import("Build/FmtStep.zig");
 pub const InstallArtifactStep = @import("Build/InstallArtifactStep.zig");
 pub const InstallDirStep = @import("Build/InstallDirStep.zig");
@@ -1230,6 +1231,35 @@ pub fn addInstallDirectory(self: *Build, options: InstallDirectoryOptions) *Inst
     return install_step;
 }
 
+///`dest_rel_path` is relative to install prefix path
+pub fn addDownloadFile(self: *Build, uri: []const u8, dest_rel_path: []const u8) *DownloadFileStep {
+    return DownloadFileStep.create(self, uri, .prefix, dest_rel_path);
+}
+
+///`dest_rel_path` is relative to install bin path
+pub fn addDownloadBinFile(self: *Build, uri: []const u8, dest_rel_path: []const u8) *DownloadFileStep {
+    return DownloadFileStep.create(self, uri, .bin, dest_rel_path);
+}
+
+///`dest_rel_path` is relative to install lib path
+pub fn addDownloadLibFile(self: *Build, uri: []const u8, dest_rel_path: []const u8) *DownloadFileStep {
+    return DownloadFileStep.create(self, uri, .lib, dest_rel_path);
+}
+
+///`dest_rel_path` is relative to install header path
+pub fn addDownloadHeaderFile(self: *Build, uri: []const u8, dest_rel_path: []const u8) *DownloadFileStep {
+    return DownloadFileStep.create(self, uri, .header, dest_rel_path);
+}
+
+pub fn addDownloadFileWithDir(
+    self: *Build,
+    uri: []const u8,
+    install_dir: InstallDir,
+    dest_rel_path: []const u8,
+) *DownloadFileStep {
+    return DownloadFileStep.create(self, uri, install_dir, dest_rel_path);
+}
+
 pub fn addCheckFile(
     b: *Build,
     file_source: FileSource,
@@ -1762,6 +1792,7 @@ pub fn hex64(x: u64) [16]u8 {
 test {
     _ = CheckFileStep;
     _ = CheckObjectStep;
+    _ = DownloadFileStep;
     _ = FmtStep;
     _ = InstallArtifactStep;
     _ = InstallDirStep;

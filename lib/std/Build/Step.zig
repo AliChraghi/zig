@@ -76,6 +76,7 @@ pub const State = enum {
 pub const Id = enum {
     top_level,
     compile,
+    download_file,
     install_artifact,
     install_file,
     install_dir,
@@ -95,6 +96,7 @@ pub const Id = enum {
         return switch (id) {
             .top_level => Build.TopLevelStep,
             .compile => Build.CompileStep,
+            .download_file => Build.DownloadFileStep,
             .install_artifact => Build.InstallArtifactStep,
             .install_file => Build.InstallFileStep,
             .install_dir => Build.InstallDirStep,
